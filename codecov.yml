@@ -1,0 +1,33 @@
+codecov:
+  notify:
+    require_ci_to_pass: yes
+  max_report_age: off
+  bot: "gguidini"
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+
+  status:
+    project: yes
+    patch: yes
+    changes: no
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
+
+flags:
+  unit:
+    carryforward: true
+
+comment:
+  layout: "header, diff"
+  behavior: default
+  require_changes: no
+  require_base: no

@@ -1,13 +1,13 @@
 
 class EmotionsInterface:
-    def smile():
+    def smile(self):
         raise NotImplementedError()
 
-    def frown():
+    def frown(self):
         raise NotImplementedError()
 
-    def bored():
+    def bored(self):
         raise NotImplementedError()
 
-    def crying():
+    def crying(self):
         raise NotImplementedError()

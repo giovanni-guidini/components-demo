@@ -2,7 +2,6 @@ codecov:
   notify:
     require_ci_to_pass: yes
   max_report_age: off
-  bot: "gguidini"
 
 coverage:
   precision: 2
@@ -26,8 +25,39 @@ flag_management:
   default_rules:
     carryforward: true
 
+component_management:
+  default_rules:
+    statuses:
+      - type: project
+        target: auto
+        branches:
+          - "!main"
+  individual_components:
+    - component_id: module_emotions
+      name: emotions
+      paths:
+        - emotions/*
+    - component_id: module_fruits
+      name: fruits
+      paths:
+        - fruits/*
+    - component_id: module_core
+      name: core
+      paths:
+        - core/*
+      statuses:
+        - type: project
+          target: auto
+        - type: patch
+    - component_id: ascii
+      paths:
+        - .*/ascii.py
+    - component_id: emoji
+      paths:
+        - .*/emoji.py
+      
 comment:
-  layout: "header, diff, flags"
+  layout: "header, diff, flags, components"
   behavior: default
   require_changes: no
   require_base: no

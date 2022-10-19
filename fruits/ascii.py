@@ -7,10 +7,10 @@ class AsciiFruit(FruitInterface):
         return "     _      \n   _ \\'-_,# \n  _\\'--','`|\n  \\`---`  / \n   `----'`  \n"
 
     def apple(self) -> str:
-        return "  ,--./,-.  \n / #      \ \n|          |\n \        / \n  `._,._,'  \n"
+        return "  ,--./,-.  \n / #      \\ \n|          |\n \\        / \n  `._,._,'  \n"
 
     def grape(self) -> str:
-        return "  \   \n ()() \n()()()\n ()() \n  ()  \n"
+        return "  \\   \n ()() \n()()()\n ()() \n  ()  \n"
 
 
 

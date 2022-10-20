@@ -26,6 +26,35 @@ flag_management:
   default_rules:
     carryforward: true
 
+component_management:
+  default_rules:
+    flag_regexes:
+      - "unit"    # the one flag we have
+    statuses:
+      - type: project
+        target: auto
+        branches:
+          - "!main"
+  individual_components:
+    - component_id: module_emotions
+      name: emotions
+      paths:
+        - emotions/*
+    - component_id: module_fruits
+      name: fruits
+      paths:
+        - fruits/*
+    - component_id: module_core
+      name: core
+      paths:
+        - core/*
+    - component_id: everything
+      paths:
+        - ".*"
+    - component_id: main_file
+      paths:
+        - "core/main.py"
+
 comment:
   layout: "header, diff, flags"
   behavior: default

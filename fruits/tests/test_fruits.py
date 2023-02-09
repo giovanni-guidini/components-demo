@@ -22,6 +22,18 @@ class TestAsciiFruits():
   ()  
 """
 
+    def test_grape(self):
+        assert self.fruit_class.cherry() == """
+   __.--~~.,-.__
+   `~-._.-(`-.__`-.
+           \    `~~`
+      .--./ \\
+     /#   \  \.--.
+     \    /  /#   \\
+      '--'   \    /
+              '--'
+"""
+
 class TestEmojiFruits():
     fruit_class = EmojiFruit()
     def test_banana(self):
@@ -32,3 +44,6 @@ class TestEmojiFruits():
 
     def test_apple(self):
         assert self.fruit_class.apple() == "🍎"
+
+    def test_cherry(self):
+        assert self.fruit_class.cherry() == "🍒"

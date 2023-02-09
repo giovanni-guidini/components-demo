@@ -11,6 +11,9 @@ class AsciiFruit(FruitInterface):
 
     def grape(self) -> str:
         return "  \\   \n ()() \n()()()\n ()() \n  ()  \n"
+    
+    def cherry(self) -> str:
+        return """\n   __.--~~.,-.__\n   `~-._.-(`-.__`-.\n           \    `~~`\n      .--./ \\\n     /#   \  \.--.\n     \    /  /#   \\\n      '--'   \    /\n              '--'\n"""
 
 
 

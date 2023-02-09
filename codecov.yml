@@ -7,7 +7,7 @@ codecov:
 coverage:
   precision: 2
   round: down
-  range: "70...100"
+  range: "70...90"
 
   status:
     project: yes
@@ -25,6 +25,11 @@ parsers:
 flag_management:
   default_rules:
     carryforward: true
+    statuses:
+      - name_prefix: "app"
+        type: "project"
+        carryforward_behavior: "exclude"
+        flag_coverage_not_uploaded_behavior: "exclude"
 
 comment:
   layout: "header, diff, flags"

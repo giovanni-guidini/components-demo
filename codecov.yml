@@ -30,6 +30,10 @@ flag_management:
         type: "project"
         carryforward_behavior: "exclude"
         flag_coverage_not_uploaded_behavior: "exclude"
+  individual_flags:
+    - name: unit
+      carryforward: false
+
 
 comment:
   layout: "header, diff, flags"

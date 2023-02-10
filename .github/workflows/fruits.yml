@@ -1,4 +1,4 @@
-name: 'fruit' team workflow
+name: fruit team workflow
 
 on:
   push:

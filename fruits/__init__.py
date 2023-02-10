@@ -12,3 +12,12 @@ class FruitInterface:
 
     def grape(self) -> str:
         raise NotImplementedError()
+    
+    def coconut(self) -> str:
+        raise NotImplementedError()
+    
+    def avocado(self) -> str:
+        raise NotImplementedError()
+    
+    def kiwi(self) -> str:
+        raise NotImplementedError()

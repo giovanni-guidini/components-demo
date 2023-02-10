@@ -2,7 +2,6 @@ codecov:
   notify:
     require_ci_to_pass: yes
   max_report_age: off
-  bot: "gguidini"
 
 coverage:
   precision: 2

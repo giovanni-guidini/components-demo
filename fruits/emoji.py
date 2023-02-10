@@ -9,6 +9,9 @@ class EmojiFruit(FruitInterface):
     def apple(self) -> str:
         return "🍎"
 
+    def cherry(self) -> str:
+        return "🍒"
+
     def grape(self) -> str:
         return "🍇"
 

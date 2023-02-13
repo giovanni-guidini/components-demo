@@ -84,6 +84,8 @@ def int_to_emotion(n: int):
 # comment comment
 # comment comment
 # comment comment
-# comment comment
-# comment comment
-# comment comment
+# comments comments
+# comments comments
+# comments comments
+def func(a, b):
+    return a + b

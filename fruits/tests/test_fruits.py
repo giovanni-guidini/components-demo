@@ -22,15 +22,15 @@ class TestAsciiFruits():
   ()  
 """
 
-    def test_grape(self):
+    def test_cherry(self):
         assert self.fruit_class.cherry() == """
    __.--~~.,-.__
    `~-._.-(`-.__`-.
-           \    `~~`
+           \\    `~~`
       .--./ \\
-     /#   \  \.--.
-     \    /  /#   \\
-      '--'   \    /
+     /#   \\  \\.--.
+     \\    /  /#   \\
+      '--'   \\    /
               '--'
 """
 

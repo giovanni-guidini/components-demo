@@ -1,6 +1,16 @@
 
 
 class FruitInterface:
+    FRUITS_AVAILABLE = [
+        "banana",
+        "apple",
+        "cherry",
+        "grape",
+        "coconut",
+        "avocado",
+        "kiwi"
+    ]
+
     def banana(self) -> str:
         raise NotImplementedError()
 

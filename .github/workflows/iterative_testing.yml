@@ -1,0 +1,50 @@
+name: smart test selection
+
+on: [push]
+
+jobs:
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+          with:
+            python-version: "3.10.10"
+      - name: Install CLI
+        run: |
+              mkdir workspace
+              pip wheel git+ssh://git@github.com/codecov/codecov-cli.git@63fe2ad70e9069690d938b6a3f1eb8b7c885ee4c#egg=codecov-cli --wheel-dir workspace
+              pip install workspace/*
+      - name: Persist workspace
+        uses: actions/upload-artifact@v3
+        with:
+          name: workspace
+          paths:
+            - "workspace/*.whl"
+      - name: Save commit info 
+        run: |
+          codecovcli create-commit --git-service=github
+      - name: Create report
+        run: |
+          codecovcli create-report --git-service=github
+      - name: Run Static Analysis
+        run: |
+          codecovcli static-analysis --token=$STATIC_TOKEN
+  iterative-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Attach workspace
+        uses: actions/download-artifact@v3
+        with:
+          name: workspace
+      - name: Setup dependencies
+        run: |
+          pip install workspace/*
+      - name: Run smart test selection
+        run: |
+          echo $(git merge-base HEAD^ master)
+          codecovcli label-analysis --token=$STATIC_TOKEN --base-sha=$(git merge-base HEAD^ master)
+          coverage json --show-contexts -o label.coverage.json
+          codecovcli --auto-load-params-from circleci do-upload --flag smart-tests --file=label.coverage.json

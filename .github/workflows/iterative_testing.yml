@@ -11,40 +11,43 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10.10"
-      - name: Install CLI
+      - name: Download CLI release
         run: |
-              mkdir workspace
-              pip wheel git+ssh://git@github.com/codecov/codecov-cli.git@63fe2ad70e9069690d938b6a3f1eb8b7c885ee4c#egg=codecov-cli --wheel-dir workspace
-              pip install workspace/*
-      - name: Persist workspace
-        uses: actions/upload-artifact@v3
-        with:
-          name: workspace
-          paths:
-            "workspace/*.whl"
+          mkdir /tmp/cli
+          curl --fail --output /tmp/cli/codecovcli https://cli.codecov.io/v0.1.2/linux/codecov
+          chmod +x /tmp/cli/codecovcli
       - name: Save commit info 
         run: |
-          codecovcli create-commit --git-service=github
+          /tmp/cli/codecovcli create-commit --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
       - name: Create report
         run: |
-          codecovcli create-report --git-service=github
+          /tmp/cli/codecovcli create-report --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
       - name: Run Static Analysis
         run: |
-          codecovcli static-analysis --token=$STATIC_TOKEN
+          /tmp/cli/codecovcli static-analysis --token=${{ secrets.STATIC_TOKEN }}
   iterative-testing:
+    needs: static-analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Attach workspace
-        uses: actions/download-artifact@v3
         with:
-          name: workspace
-      - name: Setup dependencies
+          fetch-depth: 0
+      - name: Download CLI release
         run: |
-          pip install workspace/*
+          mkdir /tmp/cli
+          curl --fail --output /tmp/cli/codecovcli https://cli.codecov.io/v0.1.2/linux/codecov
+          chmod +x /tmp/cli/codecovcli
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10.10"
+      - name: Install Pytest
+        run: |
+          pip install pytest
       - name: Run smart test selection
         run: |
-          echo $(git merge-base HEAD^ master)
-          codecovcli label-analysis --token=$STATIC_TOKEN --base-sha=$(git merge-base HEAD^ master)
+          BASE_COMMIT=$(git merge-base ${{ github.sha }}^ origin/main)
+          echo "Using base commit ${BASE_COMMIT}"
+          /tmp/cli/codecovcli label-analysis --token=${{ secrets.STATIC_TOKEN }} --base-sha=${BASE_COMMIT}
           coverage json --show-contexts -o label.coverage.json
-          codecovcli --auto-load-params-from circleci do-upload --flag smart-tests --file=label.coverage.json
+          /tmp/cli/codecovcli do-upload --flag smart-tests --file=label.coverage.json

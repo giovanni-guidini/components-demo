@@ -1,4 +1,3 @@
-
 from fruits import FruitInterface
 
 
@@ -14,15 +13,3 @@ class EmojiFruit(FruitInterface):
 
     def grape(self) -> str:
         return "🍇"
-
-
-
-
-
-
-
-
-
-
-
-

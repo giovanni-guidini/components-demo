@@ -1,7 +1,8 @@
 from emotions.ascii import AsciiEmotions
 from emotions.emoji import EmojiEmotions
 
-class TestAsciiEmotions():
+
+class TestAsciiEmotions:
     emotion_class = AsciiEmotions()
 
     def test_smile(self):
@@ -13,7 +14,8 @@ class TestAsciiEmotions():
     def test_bored(self):
         assert self.emotion_class.bored() == ":|"
 
-class TestEmojiEmotions():
+
+class TestEmojiEmotions:
     emotion_class = EmojiEmotions()
 
     def test_smile(self):

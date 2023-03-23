@@ -3,7 +3,7 @@ import unittest
 from unittest import mock
 
 import fruits
-from core.helpers import get_emotion_class, get_fruit_class
+from core.helpers import get_emotion_class, get_fruit_class, list_available_methods
 from emotions import EmotionsInterface
 from emotions.ascii import AsciiEmotions
 from emotions.emoji import EmojiEmotions
@@ -65,3 +65,20 @@ class TestGetFruitClass(unittest.TestCase):
         expected = fruits.AsciiFruit
         actual = get_fruit_class()
         self.assertIsInstance(actual, expected)
+
+
+class TestListAvailableMethods(unittest.TestCase):
+    class TestClass(object):
+        property1 = "test"
+
+        def method1(self):
+            pass
+
+    def test_list_available_methods_with_test_class(self):
+        assert list_available_methods(self.TestClass) == ["method1"]
+
+    def test_list_available_methods_with_instance(self):
+        obj = self.TestClass()
+        with self.assertRaises(Exception) as ctx:
+            list_available_methods(obj)
+        self.assertTrue(f"{type(obj)} is not a class." == str(ctx.exception))

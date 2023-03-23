@@ -11,6 +11,9 @@ class FruitInterface:
     def grape(self) -> str:
         raise NotImplementedError()
 
+    def pineapple(self) -> str:
+        raise NotImplementedError()
+
 
 from fruits.ascii import AsciiFruit
 from fruits.emoji import EmojiFruit

@@ -13,3 +13,6 @@ class EmojiFruit(FruitInterface):
 
     def grape(self) -> str:
         return "🍇"
+
+    def pineapple(self) -> str:
+        return "🍍"

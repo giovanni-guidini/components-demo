@@ -42,6 +42,18 @@ class TestAsciiFruits:
 """
         )
 
+    def test_pineapple(self):
+        assert (
+            self.fruit_class.pineapple()
+            == """   \\||/
+   \\||/
+ .<><><>.
+.<><><><>.
+'<><><><>'
+ '<><><>'
+"""
+        )
+
 
 class TestEmojiFruits:
     fruit_class = EmojiFruit()
@@ -57,3 +69,6 @@ class TestEmojiFruits:
 
     def test_cherry(self):
         assert self.fruit_class.cherry() == "🍒"
+
+    def test_pineapple(self):
+        assert self.fruit_class.pineapple() == "🍍"

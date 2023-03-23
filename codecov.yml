@@ -39,9 +39,22 @@ flag_management:
         - type: "project"
         - type: "patch"
 
+component_management:
+  default_rules:
+    statuses:
+      - type: project
+        target: auto
+  individual_components:
+    - component_id: actual_code
+      name: NonTestCode
+      paths:
+          - "!conftest.py"
+          - "!**/conftest.py"
+          - "!**tests**/test_*.py"
 
 comment:
-  layout: "header, diff, flags"
+  layout: "header, reach, diff, flags, files"
   behavior: default
   require_changes: no
   require_base: no
+  require_head: yes

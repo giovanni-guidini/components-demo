@@ -9,11 +9,8 @@ jobs:
   fruits-app:
     runs-on: ubuntu-latest
     name: Test Fruits App
-    defaults:
-      run:
-        working-directory: .
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - uses: actions/setup-python@v2
       with:
         python-version: '3.10.10'
@@ -21,10 +18,11 @@ jobs:
       run: pip install -r requirements.txt
     - name: Run tests and collect coverage
       run: python -m pytest fruits/** --cov=./fruits --cov-report=xml:fruits/unit.coverage.xml
-    - name: Upload coverage reports to Codecov with GitHub Action
-      uses: codecov/codecov-action@v3
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        fail_ci_if_error: true
-        verbose: true
-        flags: fruits
+    - name: Download CLI release
+      run: |
+        mkdir /tmp/cli
+        curl --fail --output /tmp/cli/codecovcli https://cli.codecov.io/v0.1.2/linux/codecov
+        chmod +x /tmp/cli/codecovcli
+    - name: Upload coverage to codecov using CLI
+      run: |
+        /tmp/cli/codecovcli --verbose do-upload --flag fruits --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error

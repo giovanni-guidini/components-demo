@@ -50,4 +50,5 @@ jobs:
           echo "Using base commit ${BASE_COMMIT}"
           /tmp/cli/codecovcli label-analysis --token=${{ secrets.STATIC_TOKEN }} --base-sha=${BASE_COMMIT}
           coverage json --show-contexts -o label.coverage.json
+          rm .coverage
           /tmp/cli/codecovcli --verbose do-upload --legacy --flag smart-tests --file=label.coverage.json --token=${{ secrets.CODECOV_TOKEN }}  --fail-on-error

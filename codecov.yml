@@ -20,7 +20,7 @@ flag_management:
   default_rules:
     carryforward: true
     statuses:
-      - name_prefix: "app/"
+      - name_prefix: "app."
         type: "project"
         carryforward_behavior: "exclude"
         flag_coverage_not_uploaded_behavior: "exclude"
@@ -29,11 +29,25 @@ flag_management:
       carryforward: false
     - name: staging
       carryforward: false
-    - name: "staging-*"
+    - name: "staging-core"
       carryforward: true
       statuses:
         - type: "project"
-          name_prefix: "staging/"
+          name_prefix: "staging."
+          carryforward_behavior: "exclude"
+          flag_coverage_not_uploaded_behavior: "exclude"
+    - name: "staging-fruits"
+      carryforward: true
+      statuses:
+        - type: "project"
+          name_prefix: "staging."
+          carryforward_behavior: "exclude"
+          flag_coverage_not_uploaded_behavior: "exclude"
+    - name: "staging-emotions"
+      carryforward: true
+      statuses:
+        - type: "project"
+          name_prefix: "staging."
           carryforward_behavior: "exclude"
           flag_coverage_not_uploaded_behavior: "exclude"
 

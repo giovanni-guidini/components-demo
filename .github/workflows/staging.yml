@@ -47,6 +47,6 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_STAGING_TOKEN }} # not required for public repos
         url: https://stage-api.codecov.dev
-        flags: staging
+        flags: staging-${{ matrix.app }}
         fail_ci_if_error: true
         verbose: true

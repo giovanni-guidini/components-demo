@@ -50,4 +50,4 @@ jobs:
         chmod +x /tmp/cli/codecovcli
     - name: Upload coverage to codecov using CLI
       run: |
-        /tmp/cli/codecovcli --verbose do-upload --flag ${{ matrix.app }} --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error
+        /tmp/cli/codecovcli --verbose do-upload --legacy --flag ${{ matrix.app }} --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error

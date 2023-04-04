@@ -1,7 +1,8 @@
 import unittest
-from unittest.mock import patch
 from io import StringIO
 from typing import List
+from unittest.mock import patch
+
 from core.main import MainMenu
 
 
@@ -10,8 +11,8 @@ class TestMainMenu(unittest.TestCase):
         self.main_menu = MainMenu()
 
     def test_menu_options(self):
-        expected_options = ["1.Fruits", "2.Emotions"]
-        self.assertEqual(self.main_menu._menu_options, expected_options)
+        expected_options = ["1. Fruits", "2. Emotions"]
+        self.assertEqual(self.main_menu.menu_options, expected_options)
 
     @patch("builtins.input", side_effect=["1"])
     def test_menu_choice_fruits(self, mock_input):
@@ -22,8 +23,8 @@ class TestMainMenu(unittest.TestCase):
             "Welcome to the Gallery!",
             "",
             "Available expos:",
-            "1.Fruits",
-            "2.Emotions",
+            "1. Fruits",
+            "2. Emotions",
             "You selected the Fruits expo.",
         ]
         self.assertEqual(expected_output, output_lines)
@@ -37,8 +38,8 @@ class TestMainMenu(unittest.TestCase):
             "Welcome to the Gallery!",
             "",
             "Available expos:",
-            "1.Fruits",
-            "2.Emotions",
+            "1. Fruits",
+            "2. Emotions",
             "You selected the Emotions expo.",
         ]
         self.assertEqual(expected_output, output_lines)
@@ -53,12 +54,12 @@ class TestMainMenu(unittest.TestCase):
             "Welcome to the Gallery!",
             "",
             "Available expos:",
-            "1.Fruits",
-            "2.Emotions",
+            "1. Fruits",
+            "2. Emotions",
             "Invalid choice.",
             "Available expos:",
-            "1.Fruits",
-            "2.Emotions",
+            "1. Fruits",
+            "2. Emotions",
             "You selected the Fruits expo.",
         ]
         self.assertEqual(expected_output, output_lines)

@@ -1,4 +1,4 @@
-name: All Teams Workflow
+name: Staging
 
 on:
   push:

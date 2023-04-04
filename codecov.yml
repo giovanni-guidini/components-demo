@@ -43,12 +43,18 @@ component_management:
     - component_id: actual_code
       name: NonTestCode
       paths:
-          - "!conftest.py"
-          - "!**/conftest.py"
-          - "!**tests**/test_*.py"
+        - "!conftest.py"
+        - "!**/conftest.py"
+        - "!**tests**/test_*.py"
+    - component_id: ascii
+      paths:
+        - "**/ascii.py"
+    - component_id: emoji
+      paths:
+        - "**/emoji.py"
 
 comment:
-  layout: "header, reach, diff, flags, files"
+  layout: "header, reach, diff, flags, components, files"
   behavior: default
   require_changes: no
   require_base: no

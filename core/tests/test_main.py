@@ -10,6 +10,10 @@ class TestMainMenu(unittest.TestCase):
     def setUp(self):
         self.main_menu = MainMenu()
 
+    def test_init_values(self):
+        self.assertEqual(self.main_menu.name, "Main Menu")
+        self.assertEqual(self.main_menu.parent, None)
+
     def test_menu_options(self):
         expected_options = ["1. Fruits", "2. Emotions"]
         self.assertEqual(self.main_menu.menu_options, expected_options)

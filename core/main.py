@@ -7,7 +7,7 @@ from core.input import parse_input
 
 class MainMenu(MenuInterface):
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__(parent=None, name="Main Menu")
         self.emotion_class = get_emotion_class()
         self.fruit_class = get_fruit_class()
 

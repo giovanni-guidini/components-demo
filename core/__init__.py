@@ -6,15 +6,17 @@ from typing import Dict, List
 class MenuContext:
     loop: bool = True
     parent: object = None
+    name: str = ""
 
 
 class MenuInterface:
     menu_options_index: Dict[str, str] = {}
     _context: MenuContext = MenuContext()
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, *, parent=None, name="") -> None:
         self._context.loop = True
         self._context.parent = parent
+        self._context.name = name
 
     @property
     def loop(self):
@@ -23,6 +25,10 @@ class MenuInterface:
     @property
     def parent(self):
         return self._context.parent
+
+    @property
+    def name(self):
+        return self._context.name
 
     def set_loop(self, update_value: bool):
         self._context.loop = update_value

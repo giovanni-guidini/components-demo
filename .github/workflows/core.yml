@@ -25,7 +25,7 @@ jobs:
         chmod +x /tmp/cli/codecovcli
     - name: Upload coverage to codecov using CLI
       run: |
-        /tmp/cli/codecovcli --verbose do-upload --legacy --flag core --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error
+        /tmp/cli/codecovcli --verbose do-upload --flag core --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error
     - name: Also upload to staging
       uses: codecov/codecov-action@v3
       with:

@@ -3,7 +3,10 @@ name: smart test selection
 on: [push]
 
 jobs:
+  install-codecov-cli:
+    uses: ./.github/workflows/download_cli.yml
   static-analysis:
+    needs: install-codecov-cli
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -11,20 +14,22 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10.10"
-      - name: Download CLI release
+      - name: Get the Codecov CLI binary
+        uses: actions/download-artifact@v2
+        with:
+          name: codecov-cli-binary
+      - name: Fix binary permission
         run: |
-          mkdir /tmp/cli
-          curl --fail --output /tmp/cli/codecovcli https://cli.codecov.io/v0.1.2/linux/codecov
-          chmod +x /tmp/cli/codecovcli
+          chmod +x codecov
       - name: Save commit info 
         run: |
-          /tmp/cli/codecovcli create-commit --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
+          ./codecov create-commit --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
       - name: Create report
         run: |
-          /tmp/cli/codecovcli create-report --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
+          ./codecov create-report --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
       - name: Run Static Analysis
         run: |
-          /tmp/cli/codecovcli static-analysis --token=${{ secrets.STATIC_TOKEN }}
+          ./codecov static-analysis --token=${{ secrets.STATIC_TOKEN }}
   iterative-testing:
     needs: static-analysis
     runs-on: ubuntu-latest
@@ -32,20 +37,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Download CLI binary
-        run: |
-          curl -Os https://cli.codecov.io/linux/latest/codecov
-          chmod +x ./codecov
-      - name: Verify integrity get GPG
-        run: curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import #
-      - name: Get SHAsums
-        run: | 
-          curl -Os https://cli.codecov.io/linux/latest/codecov.SHA256SUM
-          curl -Os https://cli.codecov.io/linux/latest/codecov.SHA256SUM.sig   
-      - name: Test Signature
-        run: gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
-      - name: Test SHAsums
-        run: shasum -a 256 -c codecov.SHA256SUM
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -53,11 +44,18 @@ jobs:
       - name: Install Pytest and its dependencies
         run: |
           pip install pytest pytest-cov pytest-mock
+      - name: Get the Codecov CLI binary
+        uses: actions/download-artifact@v2
+        with:
+          name: codecov-cli-binary
+      - name: Fix binary permission
+        run: |
+          chmod +x codecov
       - name: Run smart test selection
         run: |
           BASE_COMMIT=$(git merge-base ${{ github.sha }}^ origin/main)
           echo "Using base commit ${BASE_COMMIT}"
-          /tmp/cli/codecovcli label-analysis --token=${{ secrets.STATIC_TOKEN }} --base-sha=${BASE_COMMIT}
+          ./codecov label-analysis --token=${{ secrets.STATIC_TOKEN }} --base-sha=${BASE_COMMIT}
           coverage json --show-contexts -o label.coverage.json
           rm .coverage
-          /tmp/cli/codecovcli --verbose do-upload --flag smart-tests --file=label.coverage.json --token=${{ secrets.CODECOV_TOKEN }}  --fail-on-error
+          ./codecov --verbose do-upload --flag smart-tests --file=label.coverage.json --token=${{ secrets.CODECOV_TOKEN }}  --fail-on-error

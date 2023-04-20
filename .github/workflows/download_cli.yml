@@ -11,13 +11,11 @@ jobs:
         id: cache-codecov-cli
         uses: actions/cache@v2
         with:
-          path: /tmp/codecov
+          path: codecov
           key: ${{ runner.os }}-codecov-cli
       - name: Download CLI binary
         if: steps.cache-codecov-cli.outputs.cache-hit != 'true'
         run: |
-          mkdir /tmp/codecov
-          cd /tmp/codecov
           curl --fail -Os https://cli.codecov.io/v0.1.2/linux/codecov
           chmod +x ./codecov
       - name: Get Codecov's GPG
@@ -26,22 +24,19 @@ jobs:
       - name: Get SHAsums
         if: steps.cache-codecov-cli.outputs.cache-hit != 'true'
         run: |
-          cd /tmp/codecov
           curl --fail -Os https://cli.codecov.io/v0.1.2/linux/codecov.SHA256SUM
           curl --fail -Os https://cli.codecov.io/v0.1.2/linux/codecov.SHA256SUM.sig   
       - name: Test Signature
         if: steps.cache-codecov-cli.outputs.cache-hit != 'true'
         run: |
-          cd /tmp/codecov
           gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
       - name: Test SHAsums
         if: steps.cache-codecov-cli.outputs.cache-hit != 'true'
         run: |
-          cd /tmp/codecov
           shasum -a 256 -c codecov.SHA256SUM
       - name: Make binary available to other jobs
         uses: actions/upload-artifact@v2
         with:
           name: codecov-cli-binary
-          path: /tmp/codecov/codecov
+          path: codecov
       

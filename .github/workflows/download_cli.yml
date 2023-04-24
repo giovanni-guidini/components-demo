@@ -12,11 +12,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: codecov
-          key: ${{ runner.os }}-codecov-cli
+          key: ${{ runner.os }}-codecov-cli-v0.1.4
       - name: Download CLI binary
         if: steps.cache-codecov-cli.outputs.cache-hit != 'true'
         run: |
-          curl --fail -Os https://cli.codecov.io/v0.1.2/linux/codecov
+          curl --fail -Os https://cli.codecov.io/v0.1.4/linux/codecov
           chmod +x ./codecov
       - name: Get Codecov's GPG
         if: steps.cache-codecov-cli.outputs.cache-hit != 'true'
@@ -24,8 +24,8 @@ jobs:
       - name: Get SHAsums
         if: steps.cache-codecov-cli.outputs.cache-hit != 'true'
         run: |
-          curl --fail -Os https://cli.codecov.io/v0.1.2/linux/codecov.SHA256SUM
-          curl --fail -Os https://cli.codecov.io/v0.1.2/linux/codecov.SHA256SUM.sig   
+          curl --fail -Os https://cli.codecov.io/v0.1.4/linux/codecov.SHA256SUM
+          curl --fail -Os https://cli.codecov.io/v0.1.4/linux/codecov.SHA256SUM.sig   
       - name: Test Signature
         if: steps.cache-codecov-cli.outputs.cache-hit != 'true'
         run: |

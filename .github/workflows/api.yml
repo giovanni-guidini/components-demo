@@ -6,21 +6,25 @@ on:
       - main
 
 jobs:
+  install-codecov-cli:
+    uses: ./.github/workflows/download_cli.yml
   codecov-startup:
     runs-on: ubuntu-latest
     name: Startup Codecov Info
     steps:
-    - name: Download CLI release
+    - name: Get the Codecov CLI binary
+      uses: actions/download-artifact@v2
+      with:
+        name: codecov-cli-binary
+    - name: Fix binary permission
       run: |
-        mkdir /tmp/cli
-        curl --fail --output /tmp/cli/codecovcli https://cli.codecov.io/v0.1.2/linux/codecov
-        chmod +x /tmp/cli/codecovcli
+        chmod +x codecov
     - name: Save commit info 
       run: |
-        /tmp/cli/codecovcli create-commit --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
+        ./codecov create-commit --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
     - name: Create report
       run: |
-        /tmp/cli/codecovcli create-report --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
+        ./codecov create-report --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
   build-and-test:
     needs: codecov-startup
     runs-on: ubuntu-latest
@@ -43,11 +47,13 @@ jobs:
       run: pip install -r requirements.txt
     - name: Run tests and collect coverage
       run: python -m pytest ${{ matrix.app }}/** --cov=./${{ matrix.app }} --cov-report=xml:${{ matrix.REPORT_PATH }}
-    - name: Download CLI release
+    - name: Get the Codecov CLI binary
+      uses: actions/download-artifact@v2
+      with:
+        name: codecov-cli-binary
+    - name: Fix binary permission
       run: |
-        mkdir /tmp/cli
-        curl --fail --output /tmp/cli/codecovcli https://cli.codecov.io/v0.1.2/linux/codecov
-        chmod +x /tmp/cli/codecovcli
+        chmod +x codecov
     - name: Upload coverage to codecov using CLI
       run: |
-        /tmp/cli/codecovcli --verbose do-upload --flag ${{ matrix.app }} --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error
+        ./codecov --verbose do-upload --flag ${{ matrix.app }} --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error

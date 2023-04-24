@@ -6,6 +6,8 @@ on:
       - 'fruits/**'
 
 jobs:
+  install-codecov-cli:
+    uses: ./.github/workflows/download_cli.yml
   fruits-app:
     runs-on: ubuntu-latest
     name: Test Fruits App
@@ -18,14 +20,16 @@ jobs:
       run: pip install -r requirements.txt
     - name: Run tests and collect coverage
       run: python -m pytest fruits/** --cov=./fruits --cov-report=xml:fruits/unit.coverage.xml
-    - name: Download CLI release
+    - name: Get the Codecov CLI binary
+      uses: actions/download-artifact@v2
+      with:
+        name: codecov-cli-binary
+    - name: Fix binary permission
       run: |
-        mkdir /tmp/cli
-        curl --fail --output /tmp/cli/codecovcli https://cli.codecov.io/v0.1.2/linux/codecov
-        chmod +x /tmp/cli/codecovcli
+        chmod +x codecov
     - name: Upload coverage to codecov using CLI
       run: |
-        /tmp/cli/codecovcli --verbose do-upload --flag fruits --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error
+        ./codecov --verbose do-upload --flag fruits --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error
     - name: Also upload to staging
       uses: codecov/codecov-action@v3
       with:

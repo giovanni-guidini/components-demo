@@ -83,3 +83,8 @@ comment:
   require_changes: no
   require_base: no
   require_head: yes
+
+cli:
+  runners:
+    python:
+      include_curr_dir: true

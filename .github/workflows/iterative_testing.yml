@@ -3,10 +3,10 @@ name: smart test selection
 on: [push]
 
 jobs:
-  install-codecov-cli:
-    uses: ./.github/workflows/download_cli.yml
+  # install-codecov-cli:
+  #   uses: ./.github/workflows/download_cli.yml
   static-analysis:
-    needs: install-codecov-cli
+    # needs: install-codecov-cli
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -14,22 +14,18 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10.10"
-      - name: Get the Codecov CLI binary
-        uses: actions/download-artifact@v2
-        with:
-          name: codecov-cli-binary
-      - name: Fix binary permission
+      - name: Install Codecov CLI from pip
         run: |
-          chmod +x codecov
+          pip install pytest codecov-cli
       - name: Save commit info 
         run: |
-          ./codecov create-commit --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
+          codecovcli create-commit --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
       - name: Create report
         run: |
-          ./codecov create-report --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
+          codecovcli create-report --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
       - name: Run Static Analysis
         run: |
-          ./codecov static-analysis --token=${{ secrets.STATIC_TOKEN }}
+          codecovcli static-analysis --token=${{ secrets.STATIC_TOKEN }}
   iterative-testing:
     needs: static-analysis
     runs-on: ubuntu-latest
@@ -44,18 +40,14 @@ jobs:
       - name: Install Pytest and its dependencies
         run: |
           pip install pytest pytest-cov pytest-mock
-      - name: Get the Codecov CLI binary
-        uses: actions/download-artifact@v2
-        with:
-          name: codecov-cli-binary
-      - name: Fix binary permission
+      - name: Install Codecov CLI from pip
         run: |
-          chmod +x codecov
+          pip install codecov-cli
       - name: Run smart test selection
         run: |
           BASE_COMMIT=$(git merge-base ${{ github.sha }}^ origin/main)
           echo "Using base commit ${BASE_COMMIT}"
-          ./codecov label-analysis --token=${{ secrets.STATIC_TOKEN }} --base-sha=${BASE_COMMIT}
+          codecovcli label-analysis --token=${{ secrets.STATIC_TOKEN }} --base-sha=${BASE_COMMIT}
           coverage json --show-contexts -o label.coverage.json
           rm .coverage
-          ./codecov --verbose do-upload --flag smart-tests --file=label.coverage.json --token=${{ secrets.CODECOV_TOKEN }}  --fail-on-error
+          codecovcli --verbose do-upload --flag smart-tests --file=label.coverage.json --token=${{ secrets.CODECOV_TOKEN }}  --fail-on-error

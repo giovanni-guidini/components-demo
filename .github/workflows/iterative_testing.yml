@@ -48,6 +48,9 @@ jobs:
           BASE_COMMIT=$(git merge-base ${{ github.sha }}^ origin/main)
           echo "Using base commit ${BASE_COMMIT}"
           codecovcli label-analysis --token=${{ secrets.STATIC_TOKEN }} --base-sha=${BASE_COMMIT}
+      - name: Upload to Codecov
+        if: ${{ always() }}
+        run: |
           coverage json --show-contexts -o label.coverage.json
           rm .coverage
           codecovcli --verbose do-upload --flag smart-tests --file=label.coverage.json --token=${{ secrets.CODECOV_TOKEN }}  --fail-on-error

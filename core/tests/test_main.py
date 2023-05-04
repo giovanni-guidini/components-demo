@@ -47,6 +47,7 @@ class TestMainMenu(unittest.TestCase):
             "You selected the Emotions expo.",
         ]
         self.assertEqual(expected_output, output_lines)
+        assert False
 
     @patch("builtins.input", side_effect=["3", "1"])
     def test_invalid_menu_choice(self, mock_input):
@@ -67,3 +68,4 @@ class TestMainMenu(unittest.TestCase):
             "You selected the Fruits expo.",
         ]
         self.assertEqual(expected_output, output_lines)
+        assert False

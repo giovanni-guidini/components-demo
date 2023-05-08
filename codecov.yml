@@ -18,39 +18,18 @@ beta_groups:
 
 flag_management:
   default_rules:
-    carryforward: true
+    carryforward: false
     statuses:
       - name_prefix: "app."
         type: "project"
         carryforward_behavior: "exclude"
         flag_coverage_not_uploaded_behavior: "exclude"
   individual_flags:
-    - name: unit
-      carryforward: false
-    - name: staging
-      carryforward: false
-    - name: "staging-core"
+    - name: unit-with-labels
       carryforward: true
+      carryforward_mode: "labels"
       statuses:
-        - type: "project"
-          name_prefix: "staging."
-          carryforward_behavior: "exclude"
-          flag_coverage_not_uploaded_behavior: "exclude"
-    - name: "staging-fruits"
-      carryforward: true
-      statuses:
-        - type: "project"
-          name_prefix: "staging."
-          carryforward_behavior: "exclude"
-          flag_coverage_not_uploaded_behavior: "exclude"
-    - name: "staging-emotions"
-      carryforward: true
-      statuses:
-        - type: "project"
-          name_prefix: "staging."
-          carryforward_behavior: "exclude"
-          flag_coverage_not_uploaded_behavior: "exclude"
-
+        - type: "patch"
     - name: smart-tests
       carryforward: true
       carryforward_mode: "labels"

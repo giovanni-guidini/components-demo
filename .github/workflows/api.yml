@@ -2,29 +2,21 @@ name: All Teams Workflow
 
 on:
   push:
-    branches:
-      - main
 
 jobs:
-  install-codecov-cli:
-    uses: ./.github/workflows/download_cli.yml
   codecov-startup:
     runs-on: ubuntu-latest
     name: Startup Codecov Info
     steps:
-    - name: Get the Codecov CLI binary
-      uses: actions/download-artifact@v2
-      with:
-        name: codecov-cli-binary
-    - name: Fix binary permission
+    - name: Install Codecov CLI from pip
       run: |
-        chmod +x codecov
+        pip install pytest codecov-cli
     - name: Save commit info 
       run: |
-        ./codecov create-commit --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
+        codecovcli create-commit --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
     - name: Create report
       run: |
-        ./codecov create-report --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
+        codecovcli create-report --git-service=github --token=${{ secrets.CODECOV_TOKEN }}
   build-and-test:
     needs: codecov-startup
     runs-on: ubuntu-latest
@@ -33,11 +25,11 @@ jobs:
       matrix:
         include:
           - app: core
-            REPORT_PATH: core/unit.coverage.xml
+            delay: 0
           - app: fruits
-            REPORT_PATH: emotions/unit.coverage.xml
+            delay: 300
           - app: emotions
-            REPORT_PATH: fruits/unit.coverage.xml
+            delay: 303
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v2
@@ -45,15 +37,17 @@ jobs:
         python-version: '3.10.10'
     - name: Install requirements
       run: pip install -r requirements.txt
-    - name: Run tests and collect coverage
-      run: python -m pytest ${{ matrix.app }}/** --cov=./${{ matrix.app }} --cov-report=xml:${{ matrix.REPORT_PATH }}
-    - name: Get the Codecov CLI binary
-      uses: actions/download-artifact@v2
-      with:
-        name: codecov-cli-binary
-    - name: Fix binary permission
+    - name: Run tests and collect coverage (with labels)
+      run: python -m pytest ${{ matrix.app }}/** --cov=./${{ matrix.app }} --cov-context=test
+    - name: Fix coverage format
       run: |
-        chmod +x codecov
+        coverage json --show-contexts -o label.coverage.json
+        rm .coverage
+    - name: Introduce some delay in the receiving of reports
+      run: sleep ${{ matrix.delay }}
+    - name: Install Codecov CLI from pip
+      run: |
+        pip install pytest codecov-cli
     - name: Upload coverage to codecov using CLI
       run: |
-        ./codecov --verbose do-upload --flag ${{ matrix.app }} --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error
+        codecovcli --verbose do-upload --flag unit-with-labels --token=${{ secrets.CODECOV_TOKEN }} --fail-on-error

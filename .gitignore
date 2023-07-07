@@ -8,3 +8,5 @@ dev.sh
 
 .coverage
 *coverage.xml
+*coverage.json
+*coverage.codecov.json

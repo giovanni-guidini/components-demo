@@ -1,0 +1,8 @@
+cli:
+  plugins:
+    pycoverage:
+      report_type: "json"
+  runners:
+    python:
+      collect_tests_options:
+        - "--ignore=venv"

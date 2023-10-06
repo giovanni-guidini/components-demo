@@ -1,7 +1,6 @@
 codecov:
   notify:
     require_ci_to_pass: yes
-  max_report_age: off
 
 coverage:
   precision: 2
@@ -13,9 +12,6 @@ coverage:
     patch: yes
     changes: no
 
-beta_groups:
-  - "labels"
-
 flag_management:
   default_rules:
     carryforward: false
@@ -25,22 +21,17 @@ flag_management:
         carryforward_behavior: "exclude"
         flag_coverage_not_uploaded_behavior: "exclude"
   individual_flags:
-    - name: unit-with-labels
-      carryforward: true
-      carryforward_mode: "labels"
-      statuses:
-        - type: "patch"
     - name: smart-tests
       carryforward: true
       carryforward_mode: "labels"
       statuses:
-        - type: "project"
         - type: "patch"
+          enabled: false
 
 component_management:
   default_rules:
     statuses:
-      - type: project
+      - type: patch
         target: auto
   individual_components:
     - component_id: actual_code
@@ -56,9 +47,15 @@ component_management:
       paths:
         - "**/emoji.py"
 
-comment:
-  layout: "header, reach, diff, flags, components, files"
-  behavior: default
-  require_changes: no
-  require_base: no
-  require_head: yes
+
+cli:
+  plugins:
+    pycoverage:
+      report_type: "json"
+    compress-pycoverage:
+      file_to_compress: ".artifacts/core.coverage.json"
+      delete_uncompressed: false
+  runners:
+    python:
+      collect_tests_options:
+        - "core"

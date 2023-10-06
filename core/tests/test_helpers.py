@@ -12,6 +12,7 @@ from emotions.emoji import EmojiEmotions
 def test_select_emotion_emoji():
     with mock.patch.dict(os.environ, {"SUPPORTS_EMOJI": "True"}):
         emotion_class = get_emotion_class()
+        print("debug print")
         assert isinstance(emotion_class, EmotionsInterface)
         assert isinstance(emotion_class, EmojiEmotions)
 

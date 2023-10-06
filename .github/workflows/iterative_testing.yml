@@ -20,19 +20,9 @@ jobs:
       with:
         python-version: "3.10.10"
     # We need the setup to collect the list of tests properly
-    - name: Setup sentry env
-      uses: ./.github/actions/setup-sentry
-      id: setup
-      with:
-        snuba: true
-        # Right now, we run so few bigtable related tests that the
-        # overhead of running bigtable in all backend tests
-        # is way smaller than the time it would take to run in its own job.
-        bigtable: true
-        pg-version: 14
     - name: Download Codecov CLI
       run: |
-        pip install --extra-index-url https://pypi.org/simple --no-cache-dir codecov-cli
+        pip install codecov-cli
     # Creates the commit and report objects in codecov
     - name: Codecov startup
       run: |
@@ -79,7 +69,6 @@ jobs:
           echo "ATS_TESTS_TO_RUN=--cov-context=test" >> "$GITHUB_OUTPUT"
           echo "ATS_TESTS_TO_SKIP=" >> "$GITHUB_OUTPUT"
         fi
-
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         CODECOV_STATIC_TOKEN: ${{ secrets.STATIC_TOKEN }}

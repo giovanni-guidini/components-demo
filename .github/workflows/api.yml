@@ -32,6 +32,13 @@ jobs:
         files: .artifacts/${{ matrix.app }}.coverage.xml
         verbose: true
       continue-on-error: true
+    # This is temporary because codecov/codecov-action@v4-beta
+    # Doesn't support --disable-search option
+    # And we don't want to upload random reports (for safety)
+    - name: Clean XML report
+      if: ${{ matrix.app  == 'core' }}
+      run: |
+        rm .artifacts/core.coverage.xml
     - name: Upload to codecov - special case test ATS
       if: ${{ matrix.app  == 'core' }}
       uses: codecov/codecov-action@v4-beta

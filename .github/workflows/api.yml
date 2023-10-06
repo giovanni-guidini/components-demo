@@ -21,7 +21,9 @@ jobs:
     - name: Install requirements
       run: pip install -r requirements.txt
     - name: Run tests and collect coverage (with labels)
-      run: python -m pytest ${{ matrix.app }}/** --cov=./${{ matrix.app }}  --cov-report="json:.artifacts/${{ matrix.app }}.coverage.json" --cov-report="xml:.artifacts/${{ matrix.app }}.coverage.xml" --cov-context=test
+      run: |
+        python -m pytest ${{ matrix.app }}/** --cov=./${{ matrix.app }}  --cov-report="xml:.artifacts/${{ matrix.app }}.coverage.xml" --cov-context=test
+        coverage json -o .artifacts/${{ matrix.app }}.coverage.json --show-contexts
     - name: Upload to codecov
       uses: codecov/codecov-action@81cd2dc8148241f03f5839d295e000b8f761e378  # v3.1.0
       with:

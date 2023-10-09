@@ -55,7 +55,7 @@ jobs:
         BASE_COMMIT=$(git rev-parse ${{ github.sha }}^)
         echo $BASE_COMMIT
         output=$(codecovcli --codecov-yml-path=codecov.yml label-analysis --dry-run --token=${CODECOV_STATIC_TOKEN} --base-sha=${BASE_COMMIT}) || true
-        if [ -z "$output" ]
+        if [ -n "${output}" ];
         then
           json_output=$(echo $output | grep -o -e "{.*}")
 

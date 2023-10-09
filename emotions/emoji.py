@@ -13,3 +13,6 @@ class EmojiEmotions(EmotionsInterface):
 
     def crying(self):
         return "😭"
+
+    def unamused(self):
+        return "😒"

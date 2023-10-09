@@ -13,3 +13,6 @@ class AsciiEmotions(EmotionsInterface):
 
     def crying(self):
         return "TT-TT"
+
+    def unamused(self):
+        return '--"'

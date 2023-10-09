@@ -60,7 +60,7 @@ jobs:
         then
 
           echo ATS_TESTS_TO_RUN=$(jq <<< $json_output '.runner_options + .ats_tests_to_run | map(@sh) | join(" ")' --raw-output) >> "$GITHUB_OUTPUT"
-          echo ATS_TESTS_TO_RUN=$(jq <<< $json_output '.runner_options + .ats_tests_to_skip | map(@sh) | join(" ")' --raw-output) >> "$GITHUB_OUTPUT"
+          echo ATS_TESTS_TO_SKIP=$(jq <<< $json_output '.runner_options + .ats_tests_to_skip | map(@sh) | join(" ")' --raw-output) >> "$GITHUB_OUTPUT"
 
           test_to_run_count=$(echo $json_output | jq '.ats_tests_to_run | length')
           test_to_skip_count=$(echo $json_output | jq '.ats_tests_to_skip | length')

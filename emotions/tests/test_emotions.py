@@ -26,3 +26,6 @@ class TestEmojiEmotions:
 
     def test_bored(self):
         assert self.emotion_class.bored() == "😶"
+
+    def test_unamused(self):
+        assert self.emotion_class.unamused() == "😒"

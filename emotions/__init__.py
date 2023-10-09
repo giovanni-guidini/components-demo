@@ -11,6 +11,9 @@ class EmotionsInterface:
     def crying(self):
         raise NotImplementedError()
 
+    def unamused(self):
+        raise NotImplementedError()
+
 
 from emotions.ascii import AsciiEmotions
 from emotions.emoji import EmojiEmotions

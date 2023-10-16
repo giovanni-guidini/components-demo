@@ -101,6 +101,7 @@ jobs:
     steps:
       - name: Run pytest - multiple threads - ATS_TESTS_TO_RUN
         run: |
+          ATS_TESTS_TO_RUN=${{ needs.coverage-ats.outputs.ATS_TESTS_TO_RUN }}
           length_of_tests=$(jq <<< "$ATS_TESTS_TO_RUN" 'length')
           # The 1st value doesn't count, it's '--cov-context=test' (hence -gt 1)
           if [ $length_of_tests -gt 1]; then
@@ -111,6 +112,7 @@ jobs:
           fi
       - name: Run pytest - multiple threads - ATS_TESTS_TO_SKIP
         run: |
+          ATS_TESTS_TO_SKIP=${{ needs.coverage-ats.outputs.ATS_TESTS_TO_SKIP }}
           length_of_tests=$(jq <<< "$ATS_TESTS_TO_SKIP" | length)
           # The 1st value doesn't count, it's '--cov-context=test'
           if [ $length_of_tests -gt 1]; then

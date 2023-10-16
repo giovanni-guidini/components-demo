@@ -71,14 +71,16 @@ jobs:
           echo ATS_TESTS_TO_RUN=$(jq <<< $json_output '.runner_options + .ats_tests_to_run | @json | @sh' --raw-output) >> "$GITHUB_OUTPUT"
           echo ATS_TESTS_TO_RUN=$(jq <<< $json_output '.runner_options + .ats_tests_to_skip | @json | @sh' --raw-output) >> "$GITHUB_OUTPUT"
 
-          test_to_run_count=$(echo $json_output | jq '.ats_tests_to_run | length')
-          test_to_skip_count=$(echo $json_output | jq '.ats_tests_to_skip | length')
+          test_to_run_count=$(jq <<< $json_output '.ats_tests_to_run | length')
+          test_to_skip_count=$(jq <<< $json_output '.ats_tests_to_skip | length')
           total_tests_count=$(($test_to_run_count + $test_to_skip_count))
-          echo "Selected $test_to_run_count / $total_tests_count tests to run" >> $GITHUB_STEP_SUMMARY
+          tee <<< "Selected $test_to_run_count / $total_tests_count tests to run" "$GITHUB_STEP_SUMMARY"
         else
           tee <<< "ATS failed. Can't get list of tests to run. Fallback to all tests" "$GITHUB_STEP_SUMMARY"
-          echo "ATS_TESTS_TO_RUN=--cov-context=test" >> "$GITHUB_OUTPUT"
-          echo "ATS_TESTS_TO_SKIP=" >> "$GITHUB_OUTPUT"
+          # We need not forget to add the search options in the fallback command
+          # Otherwise pytest might run more tests than expected
+          echo "ATS_TESTS_TO_RUN='["--cov-context=test", "core"]' >> "$GITHUB_OUTPUT"
+          echo "ATS_TESTS_TO_SKIP='[]'" >> "$GITHUB_OUTPUT"
         fi
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -100,8 +102,8 @@ jobs:
       - name: Run pytest - multiple threads - ATS_TESTS_TO_RUN
         run: |
           length_of_tests=$(jq <<< "$ATS_TESTS_TO_RUN" 'length')
-          # The 1st value doesn't count, it's '--cov-context=test'
-          if [ $length_of_tests | length) -gt 1]; then
+          # The 1st value doesn't count, it's '--cov-context=test' (hence -gt 1)
+          if [ $length_of_tests -gt 1]; then
             echo "Running $length_of_tests tests"
             jq <<< "$ATS_TESTS_TO_RUN" 'join("\u0000")' --raw-output | tr -d '\n' | xargs -r0 pytest -n2
           else
@@ -111,7 +113,7 @@ jobs:
         run: |
           length_of_tests=$(jq <<< "$ATS_TESTS_TO_SKIP" | length)
           # The 1st value doesn't count, it's '--cov-context=test'
-          if [ $length_of_tests | length) -gt 1]; then
+          if [ $length_of_tests -gt 1]; then
             echo "Running $length_of_tests tests"
             jq <<< "$ATS_TESTS_TO_SKIP" 'join("\u0000")' --raw-output | tr -d '\n' | xargs -r0 pytest -n2
           else

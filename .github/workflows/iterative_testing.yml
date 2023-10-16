@@ -79,8 +79,8 @@ jobs:
           tee <<< "ATS failed. Can't get list of tests to run. Fallback to all tests" "$GITHUB_STEP_SUMMARY"
           # We need not forget to add the search options in the fallback command
           # Otherwise pytest might run more tests than expected
-          echo "ATS_TESTS_TO_RUN='["--cov-context=test", "core"]'" >> "$GITHUB_OUTPUT"
-          echo "ATS_TESTS_TO_SKIP='[]'" >> "$GITHUB_OUTPUT"
+          echo ATS_TESTS_TO_RUN='["--cov-context=test", "core"]' >> "$GITHUB_OUTPUT"
+          echo ATS_TESTS_TO_SKIP='[]' >> "$GITHUB_OUTPUT"
         fi
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

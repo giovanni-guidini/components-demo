@@ -16,3 +16,6 @@ class EmojiEmotions(EmotionsInterface):
 
     def unamused(self):
         return "😒"
+    
+    def surprised(self):
+        return "😮"

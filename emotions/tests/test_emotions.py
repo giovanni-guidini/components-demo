@@ -14,6 +14,12 @@ class TestAsciiEmotions:
     def test_bored(self):
         assert self.emotion_class.bored() == ":|"
 
+    def test_unamused(self):
+        assert self.emotion_class.unamused() == '--"'
+    
+    def test_surprised(self):
+        assert self.emotion_class.surprised() == ":O"
+
 
 class TestEmojiEmotions:
     emotion_class = EmojiEmotions()
@@ -29,3 +35,6 @@ class TestEmojiEmotions:
 
     def test_unamused(self):
         assert self.emotion_class.unamused() == "😒"
+
+    def test_surprised(self):
+        assert self.emotion_class.surprised() == "😮"

@@ -17,7 +17,8 @@ class TestFruitsMenu(unittest.TestCase):
             "1": "crying",
             "2": "frown",
             "3": "smile",
-            "4": "unamused",
+            "4": "surprised",
+            "5": "unamused",
         }
 
     def test_init_ascii(self):
@@ -29,7 +30,8 @@ class TestFruitsMenu(unittest.TestCase):
             "1": "crying",
             "2": "frown",
             "3": "smile",
-            "4": "unamused",
+            "4": "surprised",
+            "5": "unamused",
         }
 
     def test_menu_options(self):
@@ -39,7 +41,8 @@ class TestFruitsMenu(unittest.TestCase):
             "1. crying",
             "2. frown",
             "3. smile",
-            "4. unamused",
+            "4. surprised",
+            "5. unamused",
         ]
 
     @patch("builtins.input", side_effect=["0"])
@@ -56,7 +59,8 @@ class TestFruitsMenu(unittest.TestCase):
             "1. crying",
             "2. frown",
             "3. smile",
-            "4. unamused",
+            "4. surprised",
+            "5. unamused",
             "",
             "",
             "😶",

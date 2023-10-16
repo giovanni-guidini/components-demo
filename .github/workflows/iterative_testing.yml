@@ -79,8 +79,8 @@ jobs:
           tee <<< "ATS failed. Can't get list of tests to run. Fallback to all tests" "$GITHUB_STEP_SUMMARY"
           # We need not forget to add the search options in the fallback command
           # Otherwise pytest might run more tests than expected
-          echo "ATS_TESTS_TO_RUN='["--cov-context=test", "core"]'" >> "$GITHUB_OUTPUT"
-          echo "ATS_TESTS_TO_SKIP='[]'" >> "$GITHUB_OUTPUT"
+          echo ATS_TESTS_TO_RUN="'[\"--cov-context=test\", \"core\"]'" >> "$GITHUB_OUTPUT"
+          echo ATS_TESTS_TO_SKIP="'[]'" >> "$GITHUB_OUTPUT"
         fi
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -110,21 +110,21 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run pytest - multiple threads - ATS_TESTS_TO_RUN
         run: |
-          length_of_tests=$(jq <<< "${{ needs.coverage-ats.outputs.ATS_TESTS_TO_RUN }}" 'length')
+          length_of_tests=$(jq <<< ${{ needs.coverage-ats.outputs.ATS_TESTS_TO_RUN }} 'length')
           # The 1st value doesn't count, it's '--cov-context=test' (hence -gt 1)
           if [ $length_of_tests -gt 1 ]; then
             echo "Running $length_of_tests tests"
-            jq <<< "${{ needs.coverage-ats.outputs.ATS_TESTS_TO_RUN }}" 'join("\u0000")' --raw-output | tr -d '\n' | xargs -r0 pytest -n2
+            jq <<< ${{ needs.coverage-ats.outputs.ATS_TESTS_TO_RUN }} 'join("\u0000")' --raw-output | tr -d '\n' | xargs -r0 pytest -n2
           else
             echo "No tests to run"
           fi
       - name: Run pytest - multiple threads - ATS_TESTS_TO_SKIP
         run: |
-          length_of_tests=$(jq <<< "${{ needs.coverage-ats.outputs.ATS_TESTS_TO_SKIP }}" 'length')
+          length_of_tests=$(jq <<< ${{ needs.coverage-ats.outputs.ATS_TESTS_TO_SKIP }} 'length')
           # The 1st value doesn't count, it's '--cov-context=test'
           if [ $length_of_tests -gt 1 ]; then
             echo "Running $length_of_tests tests"
-            jq <<< "${{ needs.coverage-ats.outputs.ATS_TESTS_TO_SKIP }}" 'join("\u0000")' --raw-output | tr -d '\n' | xargs -r0 pytest -n2
+            jq <<< ${{ needs.coverage-ats.outputs.ATS_TESTS_TO_SKIP }} 'join("\u0000")' --raw-output | tr -d '\n' | xargs -r0 pytest -n2
           else
             echo "No tests to run"
           fi

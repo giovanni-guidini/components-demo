@@ -83,6 +83,7 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
           echo ATS_TESTS_TO_SKIP="'[]'" >> "$GITHUB_OUTPUT"
           echo "::error ATS failed"
+          exit 1
         fi
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

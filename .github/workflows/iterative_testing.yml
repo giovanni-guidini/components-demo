@@ -84,7 +84,7 @@ jobs:
               ]'
             )
             ATS_TESTS_TO_SKIP='[]'
-            EOF
+        EOF
         fi
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

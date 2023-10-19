@@ -24,7 +24,7 @@ class TestMainMenu(unittest.TestCase):
             self.main_menu.run()
             output_lines = fake_output.getvalue().strip().split("\n")
         expected_output = [
-            "Welcome to the Gallery!",
+            "Welcome to the ~Gallery~!",
             "",
             "Available expos:",
             "1. Fruits",
@@ -39,7 +39,7 @@ class TestMainMenu(unittest.TestCase):
             self.main_menu.run()
             output_lines = fake_output.getvalue().strip().split("\n")
         expected_output = [
-            "Welcome to the Gallery!",
+            "Welcome to the ~Gallery~!",
             "",
             "Available expos:",
             "1. Fruits",
@@ -55,7 +55,7 @@ class TestMainMenu(unittest.TestCase):
             self.main_menu.run()
             output_lines = fake_output.getvalue().strip().split("\n")
         expected_output = [
-            "Welcome to the Gallery!",
+            "Welcome to the ~Gallery~!",
             "",
             "Available expos:",
             "1. Fruits",

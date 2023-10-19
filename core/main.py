@@ -15,7 +15,7 @@ class MainMenu(MenuInterface):
 
     def run(self, *args, **kwargs):
         while self.loop:
-            print("Welcome to the Gallery!\n")
+            print("Welcome to the ~Gallery~!\n")
             print("\n".join(["Available expos:"] + self.menu_options))
             menu_choice = parse_input(
                 "What are you interested in seeing? ",

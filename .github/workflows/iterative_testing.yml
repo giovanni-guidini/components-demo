@@ -57,7 +57,7 @@ jobs:
     - name: Label Analysis
       id: label_analysis
       run: |
-        BASE_COMMIT=$(git rev-parse ${{ github.sha }}^)
+        BASE_COMMIT=d2af1c0ae8f92facfcdcaad8c8ee77ee7d19ecd9
         echo $BASE_COMMIT
         output=$(codecovcli --codecov-yml-path=codecov.yml label-analysis --dry-run --token=${CODECOV_STATIC_TOKEN} --base-sha=${BASE_COMMIT}) || true
         : $output

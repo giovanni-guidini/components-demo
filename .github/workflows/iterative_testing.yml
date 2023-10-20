@@ -119,7 +119,7 @@ jobs:
           # The 1st value doesn't count, it's '--cov-context=test' (hence -gt 1)
           if [ $length_of_tests -gt 1 ]; then
             echo "Running $length_of_tests tests"
-            jq <<< ${{ needs.coverage-ats.outputs.ATS_TESTS_TO_RUN }} 'join("\u0000")' --raw-output | tr -d '\n' | xargs -r0 pytest -n2
+            jq <<< ${{ needs.coverage-ats.outputs.ATS_TESTS_TO_RUN }} 'join("\u0000")' --raw-output0 | xargs -r0 pytest -n2
           else
             echo "No tests to run"
           fi
@@ -129,7 +129,7 @@ jobs:
           # The 1st value doesn't count, it's '--cov-context=test'
           if [ $length_of_tests -gt 1 ]; then
             echo "Running $length_of_tests tests"
-            jq <<< ${{ needs.coverage-ats.outputs.ATS_TESTS_TO_SKIP }} 'join("\u0000")' --raw-output | tr -d '\n' | xargs -r0 pytest -n2
+            jq <<< ${{ needs.coverage-ats.outputs.ATS_TESTS_TO_SKIP }} 'join("\u0000")' --raw-output0 | xargs -r0 pytest -n2
           else
             echo "No tests to run"
           fi

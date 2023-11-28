@@ -31,6 +31,7 @@ class TestMainMenu(unittest.TestCase):
             "2. Emotions",
             "You selected the Fruits expo.",
         ]
+        assert len(output_lines) == 6
         self.assertEqual(expected_output, output_lines)
 
     @patch("builtins.input", side_effect=["2"])

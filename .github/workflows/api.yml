@@ -19,19 +19,18 @@ jobs:
       with:
         python-version: '3.10.10'
     - name: Install requirements
-      run: pip install -r requirements.txt
+      run: |
+        pip install -r requirements.txt
+        pip install codecov-cli
     - name: Run tests and collect coverage (with labels)
       run: |
         python -m pytest ${{ matrix.app }}/** --cov=./${{ matrix.app }}  --cov-report="xml:.artifacts/${{ matrix.app }}.coverage.xml" --cov-context=test
         coverage json -o .artifacts/${{ matrix.app }}.coverage.json --show-contexts
     - name: Upload to codecov
-      uses: codecov/codecov-action@81cd2dc8148241f03f5839d295e000b8f761e378  # v3.1.0
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        flags: ${{ matrix.app }}
-        files: .artifacts/${{ matrix.app }}.coverage.xml
-        verbose: true
-      continue-on-error: true
+      run: |
+        codecovcli --url=${{ secrets.CODECOV_STAGING_URL }} do-upload --flag ${{ matrix.app }} --file .artifacts/${{ matrix.app }}.coverage.xml --disable-search --token=${CODECOV_TOKEN} 
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_STAGING_TOKEN }}
     # This is temporary because codecov/codecov-action@v4-beta
     # Doesn't support --disable-search option
     # And we don't want to upload random reports (for safety)
@@ -41,11 +40,7 @@ jobs:
         rm .artifacts/core.coverage.xml
     - name: Upload to codecov - special case test ATS
       if: ${{ matrix.app  == 'core' }}
-      uses: codecov/codecov-action@v4-beta
+      run: |
+        codecovcli --url=${{ secrets.CODECOV_STAGING_URL }} do-upload --flag smart-tests --plugin compress-pycoverage --file .artifacts/core.coverage.codecov.json --token=${CODECOV_TOKEN} 
       env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      with:
-        files: .artifacts/core.coverage.codecov.json
-        flags: smart-tests
-        plugins: compress-pycoverage
-      continue-on-error: true
+        CODECOV_TOKEN: ${{ secrets.CODECOV_STAGING_TOKEN }}

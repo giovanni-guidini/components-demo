@@ -28,14 +28,14 @@ jobs:
     # We need the setup to collect the list of tests properly
     - name: Download Codecov CLI
       run: |
-        pip install codecov-cli==0.4.0
+        pip install codecov-cli==0.4.1
     # Creates the commit and report objects in codecov
     - name: Codecov startup
       run: |
         codecovcli create-commit
         codecovcli create-report
       env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        CODECOV_TOKEN: ${{ secrets.CODECOV_STAGING_TOKEN }}
     # Sends static analysis information to codecov
     - name: Static Analysis
       run: |
@@ -46,8 +46,8 @@ jobs:
         --folders-to-exclude static \
         --folders-to-exclude bin
       env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        CODECOV_STATIC_TOKEN: ${{ secrets.STATIC_TOKEN }}
+        CODECOV_TOKEN: ${{ secrets.CODECOV_STAGING_TOKEN }}
+        CODECOV_STATIC_TOKEN: ${{ secrets.CODECOV_STAGING_STATIC_TOKEN }}
     - name: Install requirements
       run: pip install -r requirements.txt
     # Run label analysis in dry mode to get the list of tests to run
@@ -86,8 +86,8 @@ jobs:
           exit 1
         fi
       env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        CODECOV_STATIC_TOKEN: ${{ secrets.STATIC_TOKEN }}
+        CODECOV_TOKEN: ${{ secrets.CODECOV_STAGING_TOKEN }}
+        CODECOV_STATIC_TOKEN: ${{ secrets.CODECOV_STAGING_STATIC_TOKEN }}
   debug:
     runs-on: ubuntu-latest
     needs: coverage-ats

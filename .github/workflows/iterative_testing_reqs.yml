@@ -1,0 +1,35 @@
+name: Reqs for iterative testing
+
+on:
+  push:
+
+jobs:
+  prep-commit-for-ats:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v2
+          with:
+            python-version: '3.10'
+        - name: download codecov cli
+          run: |
+            pip install codecov-cli==0.4.1
+        - name: Codecov startup
+          run: |
+            codecovcli --url=${{ secrets.CODECOV_STAGING_URL }} create-commit --token=${CODECOV_TOKEN}
+            codecovcli --url=${{ secrets.CODECOV_STAGING_URL }} create-report --token=${CODECOV_TOKEN}
+          env:
+            CODECOV_TOKEN: ${{ secrets.CODECOV_STAGING_TOKEN }}
+        # Sends static analysis information to codecov
+        # This is used as an input in Codecov Automated Test Selection.
+        # It's necessary so we can use this commit as the BASE for comparison
+        - name: Static Analysis
+          run: |
+            codecovcli --url=${{ secrets.CODECOV_STAGING_URL }} static-analysis --token=${CODECOV_STATIC_TOKEN} \
+            --folders-to-exclude .artifacts \
+            --folders-to-exclude .github \
+            --folders-to-exclude .venv
+          env:
+            CODECOV_TOKEN: ${{ secrets.CODECOV_STAGING_TOKEN }}
+            CODECOV_STATIC_TOKEN: ${{ secrets.CODECOV_STAGING_STATIC_TOKEN }}
+

@@ -25,7 +25,8 @@ jobs:
         # It's necessary so we can use this commit as the BASE for comparison
         - name: Static Analysis
           run: |
-            codecovcli --url=${{ secrets.CODECOV_STAGING_URL }} static-analysis --token=${CODECOV_STATIC_TOKEN} \
+            codecovcli --url=${{ secrets.CODECOV_STAGING_URL }} static-analysis \
+            --token=${CODECOV_STATIC_TOKEN} \
             --folders-to-exclude .artifacts \
             --folders-to-exclude .github \
             --folders-to-exclude .venv

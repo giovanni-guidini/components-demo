@@ -13,6 +13,9 @@ class EmotionsInterface:
 
     def unamused(self):
         raise NotImplementedError()
+    
+    def surprised(self):
+        raise NotImplementedError()
 
 
 from emotions.ascii import AsciiEmotions
